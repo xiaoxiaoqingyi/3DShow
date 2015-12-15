@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\GithubProject\\3DShow\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\test.png",
+        "source": "E:\\GithubProject\\3DShow\\app\\src\\main\\res\\mipmap-xxhdpi\\test.png"
+    },
+    {
+        "merged": "E:\\GithubProject\\3DShow\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi-v4\\ic_launcher.png",
+        "source": "E:\\GithubProject\\3DShow\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    }
+]
