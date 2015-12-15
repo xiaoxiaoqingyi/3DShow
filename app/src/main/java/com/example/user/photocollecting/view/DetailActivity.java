@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.user.photocollecting.R;
 import com.example.user.photocollecting.Util.BitmapUtils;
 import com.example.user.photocollecting.Util.FileComparator;
+import com.example.user.photocollecting.Util.Utils;
 import com.example.user.photocollecting.adapter.LibraryListViewAdapter;
 import com.example.user.photocollecting.entity.Goods;
 
@@ -65,7 +66,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initData(){
         String path = getIntent().getStringExtra("path");
-        img.setImageBitmap(BitmapUtils.getBitmapFromFilePath(path, 540, 960));
+        img.setImageBitmap(BitmapUtils.getBitmapFromFilePath(path, Utils.getDisplayWidth(this), Utils.getDisplayWidth(this)));
         final String dirName = getIntent().getStringExtra("name");
         name.setText(dirName);
         new Thread(){
@@ -86,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
                 Goods goods = new Goods();
                 goods.setImgFile(fileList[i]);
                 goods.setLastModified(fileList[i].lastModified());
-                goods.setBitmap(BitmapUtils.getBitmapFromFile(fileList[i], 540, 960));
+                goods.setBitmap(BitmapUtils.getBitmapFromFile(fileList[i], Utils.getDisplayWidth(this), Utils.getDisplayWidth(this)));
                 mGoodsList.add(goods);
             }
 //            Collections.sort(mGoodsList, new FileComparator());//通过重写Comparator实现时间排序
