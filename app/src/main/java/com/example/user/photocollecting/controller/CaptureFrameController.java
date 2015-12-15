@@ -45,8 +45,13 @@ public class CaptureFrameController {
                 Matrix matrix = new Matrix();
                 matrix.reset();
                 matrix.setRotate(90);
-                bitmap = Bitmap.createBitmap(bitmap,0,0, bitmap.getWidth(), bitmap.getHeight(),matrix, true);
-                BitmapUtils.saveBitmap(bitmap,photoDir , prefixName+k+".png");
+                if(bitmap.getWidth() >bitmap.getHeight()){
+                    bitmap = Bitmap.createBitmap(bitmap,(bitmap.getWidth() - bitmap.getHeight())/2,0, bitmap.getHeight(), bitmap.getHeight(),matrix, true);
+                }else{
+                    bitmap = Bitmap.createBitmap(bitmap,0,(bitmap.getHeight()-bitmap.getWidth())/2, bitmap.getWidth(), bitmap.getWidth(),matrix, true);
+                }
+
+                BitmapUtils.saveBitmap(bitmap, photoDir, prefixName + k + ".png");
             }
         }
         //删除视频文件
