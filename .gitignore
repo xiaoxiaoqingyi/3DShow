@@ -1,5 +1,6 @@
 /.gradle
 /.idea
-local.properties
-3DShow.iml
+/3DShow.iml
+/local.properties
 /app/app.iml
+/app/build

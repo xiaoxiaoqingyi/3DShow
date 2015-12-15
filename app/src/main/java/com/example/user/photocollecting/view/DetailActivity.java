@@ -1,12 +1,14 @@
 package com.example.user.photocollecting.view;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.LruCache;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,9 +29,12 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private List<Goods> mGoodsList = new ArrayList<Goods>();
+    /**
+     * 缓存Image的类，当存储Image的大小大于LruCache设定的值，系统自动释放内存
+     */
+    private LruCache<Integer, Bitmap> mMemoryCache;
 
-    private TextView name;
+    private List<String> fileLists = new ArrayList<String>();
     /**
      * 默认显示第一张图片
      */
@@ -55,20 +60,19 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        initBitmapCache();
         initView();
         initData();
     }
 
     private void initView(){
         img = (ImageView)findViewById(R.id.img);
-        name = (TextView)findViewById(R.id.name);
     }
 
     private void initData(){
         String path = getIntent().getStringExtra("path");
-        img.setImageBitmap(BitmapUtils.getBitmapFromFilePath(path, Utils.getDisplayWidth(this), Utils.getDisplayWidth(this)));
+        img.setImageBitmap(BitmapUtils.getBitmapFromFilePath(path, Utils.getDisplayWidth(this)/2, Utils.getDisplayWHHeigth(this)/2));
         final String dirName = getIntent().getStringExtra("name");
-        name.setText(dirName);
         new Thread(){
             @Override
             public void run() {
@@ -84,11 +88,8 @@ public class DetailActivity extends AppCompatActivity {
         if(savedir.exists()){
             File[] fileList = savedir.listFiles();
             for (int i=0; i< fileList.length; i++){
-                Goods goods = new Goods();
-                goods.setImgFile(fileList[i]);
-                goods.setLastModified(fileList[i].lastModified());
-                goods.setBitmap(BitmapUtils.getBitmapFromFile(fileList[i], Utils.getDisplayWidth(this), Utils.getDisplayWidth(this)));
-                mGoodsList.add(goods);
+                fileLists.add(fileList[i].getAbsolutePath());
+                mMemoryCache.put(i, BitmapUtils.getBitmapFromFile(fileList[i], Utils.getDisplayWidth(this)/2, Utils.getDisplayWHHeigth(this)/2));
             }
 //            Collections.sort(mGoodsList, new FileComparator());//通过重写Comparator实现时间排序
         }
@@ -134,16 +135,48 @@ public class DetailActivity extends AppCompatActivity {
         if((offset_X- X)/interval > 1){
             current_image = down_page - (int)(offset_X- X)/interval;
             if(current_image < 0 ){
-                current_image = current_image % mGoodsList.size() + mGoodsList.size();
+                current_image = current_image % fileLists.size() + fileLists.size();
             }
-            img.setImageBitmap(mGoodsList.get(current_image).getBitmap());
+
+            if(mMemoryCache.get(current_image) != null){
+                img.setImageBitmap(mMemoryCache.get(current_image));
+            }else if(current_image < fileLists.size()){
+                Bitmap bitmap = BitmapUtils.getBitmapFromFilePath(fileLists.get(current_image), Utils.getDisplayWidth(this) / 2,
+                        Utils.getDisplayWHHeigth(this) / 2);
+                img.setImageBitmap(bitmap);
+            }
+
         }else if((offset_X - X )/interval < -1){
             current_image = down_page + Math.abs((int)(offset_X- X)/interval);
-            if(current_image > mGoodsList.size() - 1){
-                current_image = current_image % mGoodsList.size();
+            if(current_image > fileLists.size() - 1){
+                current_image = current_image % fileLists.size();
             }
-            img.setImageBitmap(mGoodsList.get(current_image).getBitmap());
+            if(mMemoryCache.get(current_image) != null){
+                img.setImageBitmap(mMemoryCache.get(current_image));
+            }else if(current_image < fileLists.size()){
+                Bitmap bitmap = BitmapUtils.getBitmapFromFilePath(fileLists.get(current_image), Utils.getDisplayWidth(this) / 2,
+                        Utils.getDisplayWHHeigth(this) / 2);
+                img.setImageBitmap(bitmap);
+            }
         }
+    }
+
+
+    public void  initBitmapCache(){
+        //获取系统分配给每个应用程序的最大内存，每个应用系统分配32M
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int mCacheSize = maxMemory / 4;
+        //给LruCache分配1/4 8M
+        mMemoryCache = new LruCache<Integer, Bitmap>(mCacheSize){
+
+            //必须重写此方法，来测量Bitmap的大小
+            @Override
+            protected int sizeOf(Integer key, Bitmap value) {
+                return value.getRowBytes() * value.getHeight();
+            }
+
+        };
+
     }
 
 }

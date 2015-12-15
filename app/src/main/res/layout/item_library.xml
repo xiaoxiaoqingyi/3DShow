@@ -37,6 +37,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="fitXY"
+        android:background="@android:color/black"
         android:layout_margin="10dp"/>
 
     <TextView
@@ -44,7 +45,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        android:textSize="16sp"
         android:text="diamond"/>
+
+    <LinearLayout
+        android:id="@+id/lay_black_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Processing..."
+            android:textSize="16sp"/>
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            style="?android:attr/progressBarStyleHorizontal"/>
+
+    </LinearLayout>
 
 </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

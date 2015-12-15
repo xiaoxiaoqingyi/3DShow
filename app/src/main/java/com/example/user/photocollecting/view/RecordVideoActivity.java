@@ -172,8 +172,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
         this.mOnRecordFinishListener = onRecordFinishListener;
         createRecordDir();
         try {
-//            if (!isOpenCamera)// 如果未打开摄像头，则打开
-//                initCamera();
             initRecord();
             mTimeCount = 0;// 时间计数器重新赋值
             mTimer = new Timer();
@@ -279,6 +277,9 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
                 }
             }.start();
 
+
+            setResult(Activity.RESULT_OK);
+
         }
     };
 
@@ -322,10 +323,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
             Camera.Parameters parameters = mCamera.getParameters();// 获得相机参数
             mWidth = width;
             mHeight = height;
-//            List<Camera.Size> picSizes = parameters.getSupportedPictureSizes();
-//            List<Camera.Size> PreViewSizes = parameters.getSupportedPreviewSizes();
-//            List<Camera.Size> videoSizes = parameters.getSupportedVideoSizes();
-//                parameters.setPictureSize(1200,1600);
 
             parameters.setPreviewSize(height, width); // 设置预览图像大小
             parameters.set("orientation", "portrait");
@@ -377,10 +374,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case REFRESH:
-                    setResult(Activity.RESULT_OK);
-                    finish();
-                    break;
                 case FINISH:
                     loading.setVisibility(View.VISIBLE);
                     mProgressbar.setVisibility(View.GONE);

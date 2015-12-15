@@ -14,6 +14,15 @@ public class Goods implements Serializable{
     private String name;
     private long lastModified;
     private Bitmap bitmap;
+    private  boolean isProcessing;
+
+    public boolean isProcessing() {
+        return isProcessing;
+    }
+
+    public void setIsProcessing(boolean isProcessing) {
+        this.isProcessing = isProcessing;
+    }
 
     public File getImgFile() {
         return imgFile;

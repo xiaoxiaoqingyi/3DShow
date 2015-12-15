@@ -116,7 +116,7 @@ public class BitmapUtils {
 
         try {
             fOut = new FileOutputStream(f);
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
             mBitmap.recycle();
             fOut.flush();
             fOut.close();

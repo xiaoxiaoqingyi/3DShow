@@ -32,4 +32,11 @@ public class Utils {
         int width = wm.getDefaultDisplay().getWidth();
         return width;
     }
+
+    public static int getDisplayWHHeigth(Activity context){
+        WindowManager wm = context.getWindowManager();
+
+        int height = wm.getDefaultDisplay().getHeight();
+        return height;
+    }
 }
