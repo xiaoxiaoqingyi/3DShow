@@ -14,8 +14,8 @@
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitCenter"
         android:layout_centerVertical="true"
-        android:scaleType="fitXY"
         android:layout_centerHorizontal="true"/>
 
 
