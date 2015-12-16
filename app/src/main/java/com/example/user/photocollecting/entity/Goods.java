@@ -14,7 +14,16 @@ public class Goods implements Serializable{
     private String name;
     private long lastModified;
     private Bitmap bitmap;
-    private  boolean isProcessing;
+    private boolean isProcessing;
+    private int progress;
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
 
     public boolean isProcessing() {
         return isProcessing;

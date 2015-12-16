@@ -45,16 +45,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:visibility="gone"
         android:textSize="16sp"
         android:text="diamond"/>
 
     <LinearLayout
-        android:id="@+id/lay_black_top"
+        android:id="@+id/lay_load"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

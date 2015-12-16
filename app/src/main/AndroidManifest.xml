@@ -41,7 +41,10 @@
             android:name=".view.DetailActivity"
             android:label="@string/title_activity_detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".service.CaptureFrameService"/>
     </application>
 
 </manifest>

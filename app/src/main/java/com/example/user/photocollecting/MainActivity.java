@@ -1,10 +1,13 @@
 package com.example.user.photocollecting;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,17 +18,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.user.photocollecting.Util.BitmapUtils;
+import com.example.user.photocollecting.Util.Constants;
 import com.example.user.photocollecting.Util.FileComparator;
+import com.example.user.photocollecting.Util.Utils;
 import com.example.user.photocollecting.adapter.LibraryListViewAdapter;
 import com.example.user.photocollecting.entity.Goods;
-import com.example.user.photocollecting.view.DetailActivity;
+import com.example.user.photocollecting.service.CaptureFrameService;
 import com.example.user.photocollecting.view.RecordVideoActivity;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity{
     private ListView mListView;
     private List<Goods> mGoodsList = new ArrayList<Goods>();
     private LibraryListViewAdapter  mAdapter;
+    private MyBroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +46,24 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         initView();
         initData();
+        registerBroadCast();
     }
 
     private  void initView(){
         mListView = (ListView)findViewById(R.id.listview);
+    }
+
+    private void registerBroadCast(){
+        broadcastReceiver = new MyBroadcastReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_CAPTURE_FRAME);
+        registerReceiver(broadcastReceiver, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void initData(){
@@ -78,34 +96,69 @@ public class MainActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK && requestCode == 0){
-            //刷新数据
-            mGoodsList.clear();
-            initData();
+
+            String filePath = data.getStringExtra("filePath");
+            String dirName = Utils.getDateNumber();
+
+            Intent service = new Intent(MainActivity.this, CaptureFrameService.class);
+            service.putExtra("filePath", filePath);
+            service.putExtra("dirName", dirName);
+            startService(service);
+
+            Goods goods = new Goods();
+            goods.setName(dirName);
+            goods.setIsProcessing(true);
+            mGoodsList.add(0, goods);
+            mAdapter.setmGoodsList(mGoodsList);
+            mAdapter.notifyDataSetChanged();
         }
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_camera) {
             startActivityForResult(new Intent(this, RecordVideoActivity.class), 0);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    class MyBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent != null){
+                String dirName = intent.getStringExtra("name");
+                boolean isProgress = intent.getBooleanExtra("isProgress", false);
+                int progress = intent.getIntExtra("progress",0);
+                for (Goods goods : mGoodsList){
+                    if(goods.getName().equals(dirName)){
+                        goods.setIsProcessing(isProgress);
+                        goods.setProgress(progress);
+                        if(!isProgress){ //说明已经捕获最后一张帧了
+                            String savePath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                                    + "/RecordVideo/" + dirName;// 存放照片的文件夹
+                            File savedir = new File(savePath);
+                            goods.setImgFile(savedir.listFiles()[0]);
+                            goods.setBitmap(BitmapUtils.getBitmapFromFile(goods.getImgFile(),400,400));
+                        }
+                        mAdapter.setmGoodsList(mGoodsList);
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 }

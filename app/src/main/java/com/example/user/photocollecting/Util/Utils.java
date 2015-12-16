@@ -5,6 +5,9 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Administrator on 2015/12/1.
  */
@@ -39,4 +42,29 @@ public class Utils {
         int height = wm.getDefaultDisplay().getHeight();
         return height;
     }
+
+    /**
+     * 数字时间串
+     * @return
+     */
+    public static String getDateNumber(){
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String dateString = formatter.format(currentTime);
+        return dateString;
+    }
+
+    /**
+     * 随机num个字母
+     * @return
+     */
+    public static String randomCapital(int num){
+        String chars = "abcdefghijklmnopqrstuvwxyz";
+        StringBuffer buffer = new StringBuffer();
+        for (int i =0; i< num; i++){
+            buffer.append(chars.charAt((int)(Math.random() * 26)));
+        }
+        return  buffer.toString();
+    }
+
 }

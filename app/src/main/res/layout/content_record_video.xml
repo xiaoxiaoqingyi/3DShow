@@ -18,14 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1080px"
@@ -139,8 +131,6 @@
         android:layout_height="420px"
         android:background="@android:color/black">
 
-
-
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="320dp"
@@ -151,9 +141,6 @@
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
-
-
-
 
     <RelativeLayout
         android:layout_width="match_parent"

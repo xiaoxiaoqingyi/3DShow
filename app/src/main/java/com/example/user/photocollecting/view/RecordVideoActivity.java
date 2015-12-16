@@ -1,11 +1,7 @@
 package com.example.user.photocollecting.view;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
-import android.graphics.PixelFormat;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -29,12 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import com.example.user.photocollecting.MainActivity;
 import com.example.user.photocollecting.R;
-import com.example.user.photocollecting.Util.Utils;
-import com.example.user.photocollecting.controller.CaptureFrameController;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +39,7 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
 
     public final static int REFRESH = 111;
     public final static int FINISH = 222;
-    private ProgressBar mProgressbar, loading;
+    private ProgressBar mProgressbar;
     private SurfaceView mSurfaceView;
     private MediaRecorder mMediaRecorder;// 录制视频的类
     private SurfaceHolder mSurfaceHolder;
@@ -70,14 +62,11 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_video);
-        // 选择支持半透明模式
-        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         initView();
     }
 
     private void initView() {
         mProgressbar = (ProgressBar) findViewById(R.id.progressBar);
-        loading = (ProgressBar) findViewById(R.id.loading);
         mProgressbar.setMax(mRecordMaxTime);
         findViewById(R.id.btn_start).setOnClickListener(this);
         mSurfaceView = (SurfaceView)findViewById(R.id.surfaceView);
@@ -95,19 +84,13 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
         }
         try {
             mCamera = Camera.open();
-
             if (mCamera == null)
                 return;
-
-//            setCameraParams();
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
             freeCameraResource();
         }
-
     }
 
     @Override
@@ -115,7 +98,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
         super.onDestroy();
         stop();
     }
-
 
     /**
      * 释放摄像头资源
@@ -141,21 +123,25 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
                 mMediaRecorder.setCamera(mCamera);
             mMediaRecorder.setOnErrorListener(this);
             mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);// 视频源
-            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);// 视频输出格式
-            mMediaRecorder.setVideoFrameRate(30);// 设置录制的视频帧率
+
+            CamcorderProfile mProfile = null;
+            if(CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_1080P)) {
+                mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_1080P);
+
+            }else if(CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P)){
+                mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_720P);
+            }else {
+                mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+            }
+//            mMediaRecorder.setProfile(mProfile);//不知道为什么，直接这么设置，不起作用，要下面set 才行
+            mMediaRecorder.setOutputFormat(mProfile.fileFormat);// 视频输出格式
+            mMediaRecorder.setVideoFrameRate(mProfile.fileFormat);// 设置录制的视频帧率
             mMediaRecorder.setVideoSize(mHeight, mWidth);;// 设置分辨率：
-            mMediaRecorder.setVideoEncodingBitRate(17000000);// 设置帧频率，然后就清晰了
-            mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);// 视频录制格式
-
-
-
-//            if(CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_HIGH_SPEED_2160P)){
-//                CamcorderProfile mProfile =  CamcorderProfile.get(CamcorderProfile.QUALITY_1080P);
-//                mMediaRecorder.setProfile(mProfile);
+            mMediaRecorder.setVideoEncodingBitRate(mProfile.videoBitRate);// 设置帧频率，然后就清晰了
+            mMediaRecorder.setVideoEncoder(mProfile.videoCodec);// 视频录制格式
 //            }
 
             mMediaRecorder.setOutputFile(mVecordFile.getAbsolutePath());
-
 
             mMediaRecorder.prepare();
             mMediaRecorder.start();
@@ -184,7 +170,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
                     mProgressbar.setProgress(mTimeCount);// 设置进度条
                     if (mTimeCount == mRecordMaxTime) {// 达到指定时间，停止拍摄
                         stop();
-                        mHandler.sendEmptyMessage(FINISH);
                         if (mOnRecordFinishListener != null)
                             mOnRecordFinishListener.onRecordFinish();
                     }
@@ -255,7 +240,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
         }
         // 创建文件
         try {
-//            mVecordFile = File.createTempFile("recording", ".mp4", FileDir);//mp4格式
             mVecordFile = new File(FileDir.getAbsolutePath()+"/test.mp4");
             Log.d("Path:", mVecordFile.getAbsolutePath());
         } catch (Exception e) {
@@ -266,20 +250,7 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
     OnRecordFinishListener recordFinishListener = new OnRecordFinishListener() {
         @Override
         public void onRecordFinish() {
-
-            new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    CaptureFrameController controller = new CaptureFrameController(mVecordFile);
-                    controller.getFrameFromVideo();
-                    mHandler.sendEmptyMessage(REFRESH);
-                }
-            }.start();
-
-
-            setResult(Activity.RESULT_OK);
-
+            mHandler.sendEmptyMessage(REFRESH);
         }
     };
 
@@ -315,25 +286,23 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
         if (mCamera != null) {
-
             try {
+                mCamera.setDisplayOrientation(90);
+                mCamera.setPreviewDisplay(mSurfaceHolder);
+                Camera.Parameters parameters = mCamera.getParameters();// 获得相机参数
+                mWidth = width;
+                mHeight = height;
 
-            mCamera.setDisplayOrientation(90);
-            mCamera.setPreviewDisplay(mSurfaceHolder);
-            Camera.Parameters parameters = mCamera.getParameters();// 获得相机参数
-            mWidth = width;
-            mHeight = height;
+                parameters.setPreviewSize(height, width); // 设置预览图像大小
+                parameters.set("orientation", "portrait");
+                List<String> focusModes = parameters.getSupportedFocusModes();
+                if (focusModes.contains("continuous-video")) {
+                    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+                }
 
-            parameters.setPreviewSize(height, width); // 设置预览图像大小
-            parameters.set("orientation", "portrait");
-            List<String> focusModes = parameters.getSupportedFocusModes();
-            if (focusModes.contains("continuous-video")) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-            }
-
-            mCamera.setParameters(parameters);// 设置相机参数
-            mCamera.startPreview();// 开始预览
-            mCamera.unlock();
+                mCamera.setParameters(parameters);// 设置相机参数
+                mCamera.startPreview();// 开始预览
+                mCamera.unlock();
 
             }catch (Exception io){
                 io.printStackTrace();
@@ -374,9 +343,12 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case FINISH:
-                    loading.setVisibility(View.VISIBLE);
-                    mProgressbar.setVisibility(View.GONE);
+                case REFRESH:
+                    Intent intent = new Intent(RecordVideoActivity.this, MainActivity.class);
+                    intent.putExtra("filePath", mVecordFile.getAbsolutePath());
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                    break;
             }
 
         }
