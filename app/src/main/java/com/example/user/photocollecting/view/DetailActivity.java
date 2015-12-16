@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     /**
      * 缓存Image的类，当存储Image的大小大于LruCache设定的值，系统自动释放内存
@@ -52,6 +52,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private int down_page;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,11 +68,15 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initView(){
         img = (ImageView)findViewById(R.id.img);
+
+        findViewById(R.id.arrow_left).setOnClickListener(this);
+        findViewById(R.id.arrow_right).setOnClickListener(this);
+
     }
 
     private void initData(){
         String path = getIntent().getStringExtra("path");
-        img.setImageBitmap(BitmapUtils.getBitmapFromFilePath(path, Utils.getDisplayWidth(this)/2, Utils.getDisplayWHHeigth(this)/2));
+        img.setImageBitmap(BitmapUtils.getBitmapFromFilePath(path, Utils.getDisplayWidth(this) / 2, Utils.getDisplayWHHeigth(this) / 2));
         final String dirName = getIntent().getStringExtra("name");
         new Thread(){
             @Override
@@ -134,30 +139,40 @@ public class DetailActivity extends AppCompatActivity {
     private void slidingHander(float offset_X){
         if((offset_X- X)/interval > 1){
             current_image = down_page - (int)(offset_X- X)/interval;
-            if(current_image < 0 ){
-                current_image = current_image % fileLists.size() + fileLists.size();
-            }
-
-            if(mMemoryCache.get(current_image) != null){
-                img.setImageBitmap(mMemoryCache.get(current_image));
-            }else if(current_image < fileLists.size()){
-                Bitmap bitmap = BitmapUtils.getBitmapFromFilePath(fileLists.get(current_image), Utils.getDisplayWidth(this) / 2,
-                        Utils.getDisplayWHHeigth(this) / 2);
-                img.setImageBitmap(bitmap);
-            }
+            turnRight();
 
         }else if((offset_X - X )/interval < -1){
             current_image = down_page + Math.abs((int)(offset_X- X)/interval);
-            if(current_image > fileLists.size() - 1){
-                current_image = current_image % fileLists.size();
-            }
-            if(mMemoryCache.get(current_image) != null){
-                img.setImageBitmap(mMemoryCache.get(current_image));
-            }else if(current_image < fileLists.size()){
-                Bitmap bitmap = BitmapUtils.getBitmapFromFilePath(fileLists.get(current_image), Utils.getDisplayWidth(this) / 2,
-                        Utils.getDisplayWHHeigth(this) / 2);
-                img.setImageBitmap(bitmap);
-            }
+            turnLeft();
+        }
+    }
+
+
+    private void turnRight(){
+
+        if(current_image < 0 ){
+            current_image = current_image % fileLists.size() + fileLists.size();
+        }
+
+        if(mMemoryCache.get(current_image) != null){
+            img.setImageBitmap(mMemoryCache.get(current_image));
+        }else if(current_image < fileLists.size()){
+            Bitmap bitmap = BitmapUtils.getBitmapFromFilePath(fileLists.get(current_image), Utils.getDisplayWidth(this) / 2,
+                    Utils.getDisplayWHHeigth(this) / 2);
+            img.setImageBitmap(bitmap);
+        }
+    }
+
+    private void turnLeft(){
+        if(current_image > fileLists.size() - 1){
+            current_image = current_image % fileLists.size();
+        }
+        if(mMemoryCache.get(current_image) != null){
+            img.setImageBitmap(mMemoryCache.get(current_image));
+        }else if(current_image < fileLists.size()){
+            Bitmap bitmap = BitmapUtils.getBitmapFromFilePath(fileLists.get(current_image), Utils.getDisplayWidth(this) / 2,
+                    Utils.getDisplayWHHeigth(this) / 2);
+            img.setImageBitmap(bitmap);
         }
     }
 
@@ -179,4 +194,19 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.arrow_left:
+                current_image--;
+                turnRight();
+
+                break;
+            case R.id.arrow_right:
+                current_image++;
+                turnLeft();
+                break;
+        }
+    }
 }
