@@ -37,8 +37,6 @@ import java.util.TimerTask;
 public class RecordVideoActivity extends AppCompatActivity implements View.OnClickListener
                              , SurfaceHolder.Callback, MediaRecorder.OnErrorListener{
 
-    public final static int REFRESH = 111;
-    public final static int FINISH = 222;
     private ProgressBar mProgressbar;
     private SurfaceView mSurfaceView;
     private MediaRecorder mMediaRecorder;// 录制视频的类
@@ -78,7 +76,7 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
     /**
      * 初始化摄像头
      */
-    private void initCamera() {
+    private void initCamera(int width, int height) {
         if (mCamera != null) {
             freeCameraResource();
         }
@@ -86,6 +84,25 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
             mCamera = Camera.open();
             if (mCamera == null)
                 return;
+
+            mCamera.setDisplayOrientation(90);//摄像头默认是横向，需要调整角度变成竖直
+            mCamera.setPreviewDisplay(mSurfaceHolder);
+            Camera.Parameters parameters = mCamera.getParameters();// 获得相机参数
+            mWidth = width;
+            mHeight = height;
+
+            parameters.setPreviewSize(height, width); // 设置预览图像大小
+            parameters.set("orientation", "portrait");
+            List<String> focusModes = parameters.getSupportedFocusModes();
+            if (focusModes.contains("continuous-video")) {
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+            }
+            mCamera.getParameters().getSupportedPreviewSizes();
+            mCamera.getParameters().getSupportedPictureSizes();
+
+            mCamera.setParameters(parameters);// 设置相机参数
+            mCamera.startPreview();// 开始预览
+            mCamera.unlock();//解锁，赋予录像权限
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -250,7 +267,10 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
     OnRecordFinishListener recordFinishListener = new OnRecordFinishListener() {
         @Override
         public void onRecordFinish() {
-            mHandler.sendEmptyMessage(REFRESH);
+            Intent intent = new Intent(RecordVideoActivity.this, MainActivity.class);
+            intent.putExtra("filePath", mVecordFile.getAbsolutePath());
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         }
     };
 
@@ -273,49 +293,16 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        if (!isOpenCamera)
-            return;
-        try {
-            initCamera();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-        if (mCamera != null) {
-            try {
-                mCamera.setDisplayOrientation(90);
-                mCamera.setPreviewDisplay(mSurfaceHolder);
-                Camera.Parameters parameters = mCamera.getParameters();// 获得相机参数
-                mWidth = width;
-                mHeight = height;
-
-                parameters.setPreviewSize(height, width); // 设置预览图像大小
-                parameters.set("orientation", "portrait");
-                List<String> focusModes = parameters.getSupportedFocusModes();
-                if (focusModes.contains("continuous-video")) {
-                    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-                }
-
-                mCamera.setParameters(parameters);// 设置相机参数
-                mCamera.startPreview();// 开始预览
-                mCamera.unlock();
-
-            }catch (Exception io){
-                io.printStackTrace();
-            }
-
-        }
-
+        initCamera(width,height);
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        if (!isOpenCamera)
-            return;
         freeCameraResource();
     }
 
@@ -338,19 +325,4 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
          void onRecordFinish();
     }
 
-    Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case REFRESH:
-                    Intent intent = new Intent(RecordVideoActivity.this, MainActivity.class);
-                    intent.putExtra("filePath", mVecordFile.getAbsolutePath());
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
-                    break;
-            }
-
-        }
-    };
 }
