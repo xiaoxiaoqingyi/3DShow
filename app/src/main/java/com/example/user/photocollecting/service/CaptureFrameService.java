@@ -88,7 +88,7 @@ public class CaptureFrameService extends Service {
 
         }
         //删除视频文件
-        mFile.delete();
+//        mFile.delete();
         //停止service
         stopSelf();
 

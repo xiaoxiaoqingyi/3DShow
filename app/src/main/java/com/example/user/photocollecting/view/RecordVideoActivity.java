@@ -46,13 +46,14 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
     private Camera mCamera;
     private Timer mTimer;// 计时器
     private boolean isOpenCamera = true;// 是否一开始就打开摄像头
-    private final static int mRecordMaxTime = 20;// 一次拍摄最长时间
+    public final static int mRecordMaxTime = 20;// 一次拍摄最长时间
     private OnRecordFinishListener mOnRecordFinishListener;// 录制完成回调接口
     private int mTimeCount;// 时间计数
     private File mVecordFile = null;// 文件
     private int mWidth = 0;// 视频分辨率宽度
     private int mHeight = 0;// 视频分辨率高度
     private boolean isStarting = false;
+    List<int[]> mFpsRange;
 
     @Override
 
@@ -139,7 +140,8 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
             mMediaRecorder.setVideoSize(mHeight, mWidth);;// 设置分辨率：
             mMediaRecorder.setVideoEncodingBitRate(mProfile.videoBitRate);// 设置帧频率，然后就清晰了
             mMediaRecorder.setVideoEncoder(mProfile.videoCodec);// 视频录制格式
-//            }
+            //该设置是为了抽取视频的某些帧，真正录视频的时候，不要设置该参数
+            mMediaRecorder.setCaptureRate(mFpsRange.get(0)[0]);//获取最小的每一秒录制的帧数
 
             mMediaRecorder.setOutputFile(mVecordFile.getAbsolutePath());
 
@@ -299,6 +301,7 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
                 if (focusModes.contains("continuous-video")) {
                     parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
                 }
+               mFpsRange =  parameters.getSupportedPreviewFpsRange();
 
                 mCamera.setParameters(parameters);// 设置相机参数
                 mCamera.startPreview();// 开始预览
