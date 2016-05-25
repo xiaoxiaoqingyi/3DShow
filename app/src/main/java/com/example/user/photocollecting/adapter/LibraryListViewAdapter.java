@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.user.photocollecting.R;
 import com.example.user.photocollecting.Util.Constants;
 import com.example.user.photocollecting.entity.Goods;
+import com.example.user.photocollecting.view.AnimationListActivity;
 import com.example.user.photocollecting.view.DetailActivity;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class LibraryListViewAdapter extends BaseAdapter{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mGoodsList.get(position).getImgFile() != null ){
-                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    Intent intent = new Intent(mContext, AnimationListActivity.class);
                     intent.putExtra("path", mGoodsList.get(position).getImgFile().getAbsolutePath());
                     intent.putExtra("name", mGoodsList.get(position).getName());
                     mContext.startActivity(intent);

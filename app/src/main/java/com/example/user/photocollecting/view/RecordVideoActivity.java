@@ -300,7 +300,6 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-<<<<<<< HEAD
 
         if (mCamera != null) {
             try {
@@ -328,9 +327,7 @@ public class RecordVideoActivity extends AppCompatActivity implements View.OnCli
 
         }
 
-=======
         initCamera(width,height);
->>>>>>> origin/master
     }
 
     @Override

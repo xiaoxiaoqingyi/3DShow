@@ -46,8 +46,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".service.CaptureFrameService"/>
+        <service android:name=".service.CaptureFrameService" />
+
+        <activity android:name=".view.AnimationListActivity"></activity>
     </application>
 
 </manifest>
