@@ -48,7 +48,12 @@
 
         <service android:name=".service.CaptureFrameService" />
 
-        <activity android:name=".view.AnimationListActivity"></activity>
+        <activity android:name=".view.AnimationListActivity" />
+        <activity
+            android:name=".view.PhotoEditActivity"
+            android:label="@string/title_activity_photo_edit"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

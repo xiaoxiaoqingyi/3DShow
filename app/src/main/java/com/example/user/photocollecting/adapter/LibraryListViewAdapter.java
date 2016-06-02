@@ -47,7 +47,8 @@ public class LibraryListViewAdapter extends BaseAdapter{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mGoodsList.get(position).getImgFile() != null ){
-                    Intent intent = new Intent(mContext, AnimationListActivity.class);
+//                    Intent intent = new Intent(mContext, AnimationListActivity.class);
+                    Intent intent = new Intent(mContext, DetailActivity.class);
                     intent.putExtra("path", mGoodsList.get(position).getImgFile().getAbsolutePath());
                     intent.putExtra("name", mGoodsList.get(position).getName());
                     mContext.startActivity(intent);

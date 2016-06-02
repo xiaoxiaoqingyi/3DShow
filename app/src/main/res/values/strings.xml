@@ -2,6 +2,8 @@
     <string name="app_name">Library</string>
     <string name="action_settings">Settings</string>
     <string name="action_camera">camera</string>
+    <string name="action_edit">edit</string>
     <string name="title_activity_record_video">RecordVideoActivity</string>
     <string name="title_activity_detail">Detail</string>
+    <string name="title_activity_photo_edit">PhotoEditActivity</string>
 </resources>
