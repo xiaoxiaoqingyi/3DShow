@@ -1,3 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.4.0_342dffc63cebc100ed99bfb1c208d78e43d1bb9a/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.4.0_0764e3451aabddf06a8d0f5c5f35f6db4d3a9416/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="99d828b78ed993bcfef56019dc752b80fad4f9d5">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_8d9ed9966b6cd1848faedfb765640facc9e013e5/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_e1e6baabf1116aa91d221affb50878bc8424bcec/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="58eb2f14a66a526c2cac08a19ba7b8be98e65ca7">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_875f76756d0bdf88cf00dfb4b09dfc1949adaf7e/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-appindexing-8.1.0_1af59a54394cfbf75c8ebfa68c5ca7ab3f8311d0/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_75de8bb0673448aa388ea5018e0d852069589a9e/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.1.1_013636671517a4a3ae2c8c3c49023c457caa306a/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.1.1_439bb882d8f3890dcb2f06c80a59f6384e5285fa/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_3b580f56302d4e4ac13637c2cab9ad043e67d245/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.daimajia.swipelayout/library/1.2.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="e84b30031d4bab89a2b5c45af4eb9213828524dd">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.daimajia.swipelayout-library-1.2.0_cd38dbb4bd8d4600060568546ea5240b7ed457b4/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-8.1.0_0a2f692daba96b737fbb89c2b8673409c5d6b0bf/classes.dex" />
+    </item>
+    <item
+        jar="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/Users/a123/deyi/androidProject/3DShow/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_d083e6ca565f31dff674686c81e624dd559fb8b7/classes.dex" />
+    </item>
+
+</items>
